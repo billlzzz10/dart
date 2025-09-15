@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/di.dart';
 
@@ -11,56 +12,35 @@ class DashboardScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Novelist Plus'),
-        centerTitle: true,
+        backgroundColor: const Color(0xFF1A1B23),
+        foregroundColor: Colors.white,
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
+      backgroundColor: const Color(0xFF1A1B23),
+      body: Center(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'Welcome to Novelist Plus',
               style: TextStyle(
+                color: Colors.white,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 16),
-            Text(
-              'Your writing companion with AI assistance',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-            SizedBox(height: 32),
-            Expanded(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.book,
-                      size: 64,
-                      color: Colors.blue,
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      'Start writing your story',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ],
-                ),
+            const SizedBox(height: 32),
+            ElevatedButton.icon(
+              onPressed: () => context.go('/notes/sample'),
+              icon: const Icon(Icons.note_rounded),
+              label: const Text('Open Notes'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF2D2E3F),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // TODO: Navigate to create project
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }
