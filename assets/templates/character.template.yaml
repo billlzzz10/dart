@@ -1,0 +1,48 @@
+# Character Template for Novelist Plus
+# This template supports multiple languages for field names
+
+# Basic Information / ข้อมูลพื้นฐาน
+name: ""           # ชื่อ, nom, nombre
+surname: ""        # นามสกุล, last_name
+nickname: ""       # ชื่อเล่น, ฉายา
+role: ""           # บทบาท
+
+# Personal Details / รายละเอียดส่วนตัว
+nationality: ""    # สัญชาติ
+age: null          # อายุ
+birth_date: ""     # วันเกิด, date_naissance
+place_of_birth: ""  # บ้านเกิด, lieu_naissance
+
+# Physical Description / ลักษณะทางกาย
+height: ""         # ส่วนสูง
+weight: ""         # น้ำหนัก
+hair_color: ""     # สีผม
+eye_color: ""      # สีตา
+distinctive_features: ""  # ลักษณะเด่น
+
+# Personality / บุคลิกภาพ
+personality_traits: []  # ลักษณะนิสัย
+strengths: []      # จุดแข็ง
+weaknesses: []     # จุดอ่อน
+fears: []          # ความกลัว
+motivations: []    # แรงจูงใจ
+
+# Background / ประวัติ
+family: ""         # ครอบครัว
+education: ""      # การศึกษา
+occupation: ""     # อาชีพ
+social_status: ""  # สถานะทางสังคม
+
+# Relationships / ความสัมพันธ์
+allies: []         # พันธมิตร
+enemies: []        # ศัตรู
+romantic_interest: ""  # ความสนใจด้านความรัก
+
+# Story Role / บทบาทในเรื่อง
+story_arc: ""      # เส้นเรื่องของตัวละคร
+character_goals: [] # เป้าหมายของตัวละคร
+conflicts: []      # ความขัดแย้ง
+
+# Additional Notes / หมายเหตุเพิ่มเติม
+notes: ""
+tags: []           # แท็ก

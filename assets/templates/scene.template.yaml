@@ -1,0 +1,80 @@
+# Scene Template for Novelist Plus
+# This template supports multiple languages for field names
+
+# Basic Information / ข้อมูลพื้นฐาน
+title: ""          # ชื่อฉาก, titre, título
+chapter: ""        # บท
+scene_number: null # หมายเลขฉาก
+word_count: null   # จำนวนคำ
+
+# Setting / ฉาก
+location: ""       # สถานที่, lieu, lugar
+time_of_day: ""    # เวลา
+date: ""           # วันที่
+season: ""         # ฤดูกาล
+weather: ""        # สภาพอากาศ
+
+# Characters / ตัวละคร
+pov_character: ""  # ตัวละครมุมมอง
+main_characters: [] # ตัวละครหลัก
+supporting_characters: [] # ตัวละครสมทบ
+mentioned_characters: []  # ตัวละครที่กล่าวถึง
+
+# Plot Elements / องค์ประกอบเรื่อง
+scene_purpose: ""  # จุดประสงค์ของฉาก
+conflict: ""       # ความขัดแย้ง
+tension_level: ""  # ระดับความตึงเครียด
+emotional_arc: ""  # โค้งอารมณ์
+plot_advancement: "" # ความก้าวหน้าของเรื่อง
+
+# Scene Structure / โครงสร้างฉาก
+opening: ""        # การเปิดฉาก
+rising_action: ""  # การพัฒนาขึ้น
+climax: ""         # จุดสุดยอด
+falling_action: "" # การคลี่คลาย
+resolution: ""     # การแก้ไข
+
+# Dialogue & Action / บทสนทนาและแอคชัน
+key_dialogue: []   # บทสนทนาสำคัญ
+action_beats: []   # จังหวะแอคชัน
+subtext: ""        # ความหมายแฝง
+dialogue_purpose: "" # จุดประสงค์ของบทสนทนา
+
+# Sensory Details / รายละเอียดทางประสาทสัมผัส
+visual_elements: [] # องค์ประกอบที่มองเห็น
+sounds: []         # เสียง
+smells: []         # กลิ่น
+textures: []       # เนื้อสัมผัส
+tastes: []         # รสชาติ
+
+# Mood & Atmosphere / อารมณ์และบรรยากาศ
+mood: ""           # อารมณ์
+atmosphere: ""     # บรรยากาศ
+tone: ""           # น้ำเสียง
+pacing: ""         # จังหวะ
+
+# Subplots / เรื่องรอง
+subplots: []       # เรื่องรอง
+themes: []         # ธีม
+symbols: []        # สัญลักษณ์
+foreshadowing: []  # การบอกเหตุล่วงหน้า
+
+# Technical Notes / หมายเหตุเทคนิค
+writing_style: ""  # รูปแบบการเขียน
+narrative_voice: "" # เสียงเล่า
+tense: ""          # กาลเวลา
+point_of_view: ""  # มุมมอง
+
+# Revision Notes / หมายเหตุการแก้ไข
+revision_notes: "" # หมายเหตุการแก้ไข
+feedback: ""       # ข้อเสนอแนะ
+status: ""         # สถานะ (draft, review, final)
+
+# Connections / การเชื่อมต่อ
+previous_scene: ""  # ฉากก่อนหน้า
+next_scene: ""     # ฉากถัดไป
+related_scenes: [] # ฉากที่เกี่ยวข้อง
+
+# Additional Notes / หมายเหตุเพิ่มเติม
+notes: ""
+tags: []           # แท็ก

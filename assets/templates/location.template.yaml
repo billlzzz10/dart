@@ -1,0 +1,61 @@
+# Location Template for Novelist Plus
+# This template supports multiple languages for field names
+
+# Basic Information / ข้อมูลพื้นฐาน
+name: ""           # ชื่อ, nom, nombre
+type: ""           # ประเภท (city, building, room, etc.)
+region: ""         # ภูมิภาค, région
+country: ""        # ประเทศ, pays
+
+# Physical Description / ลักษณะทางกายภาพ
+size: ""           # ขนาด
+climate: ""        # สภาพอากาศ
+terrain: ""        # ลักษณะภูมิประเทศ
+landscape: ""      # ทิวทัศน์
+architecture: ""   # สถาปัตยกรรม
+
+# Atmosphere / บรรยากาศ
+mood: ""           # อารมณ์ความรู้สึก
+lighting: ""       # แสงสว่าง
+sounds: []         # เสียงต่างๆ
+smells: []         # กลิ่น
+temperature: ""    # อุณหภูมิ
+
+# Population / ประชากร
+inhabitants: []    # ผู้อยู่อาศัย
+population_size: ""  # จำนวนประชากร
+demographics: ""   # ลักษณะประชากร
+culture: ""        # วัฒนธรรม
+language: ""       # ภาษาที่ใช้
+
+# Economy / เศรษฐกิจ
+main_industry: ""  # อุตสาหกรรมหลัก
+trade: ""          # การค้า
+resources: []      # ทรัพยากร
+currency: ""       # สกุลเงิน
+
+# Politics / การเมือง
+government: ""     # รูปแบบการปกครอง
+leader: ""         # ผู้นำ
+laws: []           # กฎหมาย
+conflicts: []      # ความขัดแย้ง
+
+# History / ประวัติศาสตร์
+founded: ""        # ก่อตั้งเมื่อ
+historical_events: []  # เหตุการณ์สำคัญ
+legends: []        # ตำนาน
+ruins: []          # ซากปรักหักพัง
+
+# Story Role / บทบาทในเรื่อง
+significance: ""   # ความสำคัญในเรื่อง
+scenes: []         # ฉากที่เกิดขึ้น
+plot_relevance: "" # ความเกี่ยวข้องกับเนื้อเรื่อง
+
+# Connected Locations / สถานที่เชื่อมต่อ
+nearby_locations: []  # สถานที่ใกล้เคียง
+travel_routes: []     # เส้นทางการเดินทาง
+distance_from: ""     # ระยะห่างจาก
+
+# Additional Notes / หมายเหตุเพิ่มเติม
+notes: ""
+tags: []           # แท็ก
