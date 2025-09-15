@@ -14,7 +14,6 @@ class Project {
 
   String description = '';
 
-  @Index()
   late DateTime createdAt;
 
   late DateTime updatedAt;
@@ -24,6 +23,10 @@ class Project {
   List<String> sceneIds = [];
 
   List<String> settings = [];
+
+  String? coverUrl;
+  String? emoji;
+  String? icon;
 
   Project();
 
@@ -36,6 +39,9 @@ class Project {
     this.characterIds = const [],
     this.sceneIds = const [],
     this.settings = const [],
+    this.coverUrl,
+    this.emoji,
+    this.icon,
   }) {
     final now = DateTime.now();
     this.createdAt = createdAt ?? now;
