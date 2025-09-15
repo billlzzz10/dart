@@ -1,0 +1,176 @@
+เข้าใจ. งั้น roadmap ต่อไปจะปิดฟังก์ชันที่เหลือโดยไม่ทำ embed สื่อซับซ้อน (แค่ รูปภาพ + ลิงก์ พอ) แล้วเก็บส่วนที่ยังขาด
+
+
+---
+
+1) รองรับรูปและลิงก์ใน Markdown
+
+ลิงก์ → flutter_markdown รองรับ [title](http://url) อยู่แล้ว
+
+รูป → รองรับ ![](http://url) หรือ ![](local/path)
+
+ใช้ MarkdownImageBuilder custom → โหลดรูปจาก File/Asset/Network
+
+
+
+class ImageBuilder extends MarkdownElementBuilder {
+  @override
+  Widget visitElementAfter(md.Element e, TextStyle? style) {
+    final src = e.attributes['src'] ?? '';
+    if (src.startsWith('http')) {
+      return Image.network(src);
+    } else {
+      return Image.file(File(src));
+    }
+  }
+}
+
+Markdown(
+  data: noteText,
+  builders: {
+    'img': ImageBuilder(),
+  },
+  onTapLink: (text, href, title) => launchUrl(Uri.parse(href!)),
+);
+
+
+---
+
+2) Search Index (fuzzy + fulltext)
+
+ใช้ elasticlunr หรือ fuse.dart
+
+ดัชนี: project, scenes, items, notes
+
+Fields index: title, tags, body text, metadata
+
+เรียกจาก Command Palette
+
+
+final index = Index(fieldNames: ['title','body','tags'], ref: 'id');
+
+void buildIndex(List<Item> items, List<Scene> scenes){
+  for (final i in items){
+    index.addDoc({'id': i.id, 'title': i.title, 'body': i.meta.values.join(' '), 'tags': i.tags.join(',')});
+  }
+  for (final s in scenes){
+    index.addDoc({'id': s.id, 'title': s.title, 'body': s.text});
+  }
+}
+
+List<SearchResult> searchAll(String q){
+  final res = index.search(q, options: SearchOptions(expand:true));
+  return res.map((r)=>SearchResult(r.ref, r.score)).toList();
+}
+
+
+---
+
+3) Relationship Graph UI
+
+แสดงไอเท็ม (Character, Location, Event ฯลฯ) เป็น node
+
+ความสัมพันธ์ (relatesTo) เป็น edge
+
+ใช้ graphview package
+
+
+final graph = Graph()..isTree = false;
+for (final item in items) {
+  final n = Node.Id(item.id);
+  graph.addNode(n);
+}
+for (final rel in relations) {
+  graph.addEdge(Node.Id(rel.fromId), Node.Id(rel.toId));
+}
+
+return InteractiveViewer(
+  constrained: false,
+  boundaryMargin: const EdgeInsets.all(100),
+  minScale: 0.01,
+  maxScale: 5,
+  child: GraphView(
+    graph: graph,
+    algorithm: FruchtermanReingoldAlgorithm(),
+  ),
+);
+
+
+---
+
+4) Template Manager (drag-and-drop UI)
+
+สร้าง/แก้ไข template fields ด้วยการลากเรียง
+
+ใช้ reorderables package
+
+
+ReorderableListView(
+  onReorder: (oldIndex,newIndex){
+    setState(()=> fields.insert(newIndex, fields.removeAt(oldIndex)));
+  },
+  children: [
+    for (final f in fields)
+      ListTile(
+        key: ValueKey(f.key),
+        title: Text(f.label),
+        trailing: IconButton(icon: const Icon(Icons.delete), onPressed: ()=>removeField(f)),
+      )
+  ],
+);
+
+เพิ่มปุ่ม “+ Field” → modal: เลือก type (text/number/date/enum/bool) + label/key
+
+export schema → .template.yaml
+
+
+
+---
+
+5) Project Settings
+
+Backup/Export → JSON, YAML, Markdown
+
+Restore → import ไฟล์
+
+Sync (optional): ตั้งค่าเส้นทางโฟลเดอร์ หรือเชื่อม WebDAV/Drive
+
+UI = ListTile + Switch
+
+
+
+---
+
+✅ สรุป “หลังเสริม”
+
+เสร็จแล้ว
+
+Dashboard + Cover/Icon/Emoji
+
+Items + Scenes + Metadata Panel + Templates
+
+Notes (Obsidian style) + Markdown with wikilinks, callouts, code, images + links
+
+Search Index
+
+Relationship Graph
+
+Template Manager UI (drag-drop)
+
+Project Settings (export/backup)
+
+MCP + AI hooks
+
+
+ยังไม่ทำ
+
+Embed media ซับซ้อน (เสียง/วิดีโอ)
+
+Multi-device sync จริง (ตอนนี้มีแค่ export/import)
+
+
+
+---
+
+ต้องการให้ผมเขียน roadmap ขั้นตอน dev → beta → production เพื่อใช้วางแผนงานต่อเลยไหม?
+

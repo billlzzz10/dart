@@ -1,0 +1,91 @@
+โครง “cover + icon/emoji” ทำได้สองแนว
+
+1) Cover
+
+ใช้ coverUrl หรือ coverFile ใน Project
+
+แสดงเต็มกว้างบนการ์ด/หน้ารายละเอียด
+
+รองรับอัปโหลด/เลือกรูปในเครื่อง
+
+
+class Project {
+  final String id;
+  final String title;
+  final String? coverUrl;   // รูป
+  final String? emoji;      // อีโมจิ fallback
+  final String? icon;       // ชื่อไอคอน lucide
+  Project({required this.id, required this.title, this.coverUrl, this.emoji, this.icon});
+}
+
+Widget projectCover(Project p){
+  if (p.coverUrl!=null) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: Image.network(p.coverUrl!, fit: BoxFit.cover, height: 160, width: double.infinity),
+    );
+  }
+  if (p.icon!=null) {
+    return Center(child: LucideIcon(p.icon!, size: 64));
+  }
+  if (p.emoji!=null) {
+    return Center(child: Text(p.emoji!, style: const TextStyle(fontSize: 56)));
+  }
+  return Container(height:160, color: const Color(0x222E86FF));
+}
+
+2) Icon / Emoji
+
+ใช้ lucide-icons → เบาและหลากหลาย
+
+หรือเลือก emoji unicode ตรงๆ
+
+
+import 'package:lucide_icons/lucide_icons.dart';
+
+Icon(LucideIcons.bookOpen, size: 32);
+
+3) UI ใน Card
+
+class ProjectCard extends StatelessWidget {
+  final Project p;
+  const ProjectCard(this.p,{super.key});
+  @override
+  Widget build(BuildContext c){
+    return Container(
+      decoration: neuSurface(c),
+      child: Column(children:[
+        projectCover(p),
+        const SizedBox(height:8),
+        Row(children:[
+          if (p.icon!=null) LucideIcon(p.icon!, size:20),
+          if (p.emoji!=null) Text(p.emoji!, style: const TextStyle(fontSize:20)),
+          const SizedBox(width:6),
+          Expanded(child: Text(p.title, style: Theme.of(c).textTheme.titleMedium))
+        ])
+      ]),
+    );
+  }
+}
+
+4) ฟีเจอร์
+
+ผู้ใช้เลือก Cover → Icon (lucide) → Emoji ตามลำดับ
+
+หากไม่ใส่อะไรเลย แสดงสีพื้นฐาน
+
+Editor ของ Project ใส่ปุ่ม:
+
+“Choose Cover” (file picker / network url)
+
+“Pick Icon” (lucide list)
+
+“Pick Emoji” (emoji picker)
+
+
+
+
+---
+
+ต้องการให้ผมร่าง component picker (dialog ที่รวม emoji + lucide icon grid + cover uploader) ให้เลยไหม?
+
