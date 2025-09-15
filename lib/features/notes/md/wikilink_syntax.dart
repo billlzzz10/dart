@@ -1,4 +1,6 @@
 
+import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
 
 /// Captures [[wikilink]] syntax

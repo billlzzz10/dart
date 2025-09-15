@@ -10,7 +10,7 @@ class CalloutBlockSyntax extends md.BlockSyntax {
   
   @override
   md.Node? parse(md.BlockParser parser) {
-    final first = parser.current;
+    final first = parser.current.content;
     final m = _start.firstMatch(first);
     if (m == null) return null;
     
@@ -22,7 +22,7 @@ class CalloutBlockSyntax extends md.BlockSyntax {
     
     // Consume lines that start with '>' as content
     while (!parser.isDone) {
-      final line = parser.current;
+      final line = parser.current.content;
       if (line.startsWith('>')) {
         buffer.add(line.substring(1).trimLeft());
         parser.advance();

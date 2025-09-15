@@ -13,7 +13,7 @@ deploymentTarget = "cloudrun"
 expertMode = true
 
 [workflows]
-runButton = "Project"
+runButton = "Flutter Web"
 
 [[workflows.workflow]]
 name = "Project"
@@ -35,6 +35,23 @@ waitForPort = 5000
 
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow]]
+name = "Flutter Web"
+author = 43095284
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "flutter clean"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "flutter pub get"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "flutter run -d web-server --web-port 5000 --web-hostname 0.0.0.0"
 
 [[ports]]
 localPort = 5000
