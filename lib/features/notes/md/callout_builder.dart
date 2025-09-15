@@ -4,102 +4,136 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
 
 class CalloutBuilder extends MarkdownElementBuilder {
-  Color _getColor(String kind) {
-    switch (kind) {
-      case 'warning':
-        return const Color(0xFFF6C04E);
-      case 'danger':
-      case 'error':
-        return const Color(0xFFE36161);
-      case 'info':
-        return const Color(0xFF61A8E3);
-      case 'tip':
-      case 'success':
-        return const Color(0xFF4CC38A);
-      case 'note':
-      default:
-        return const Color(0xFF8A8FA3);
-    }
-  }
-  
-  IconData _getIcon(String kind) {
-    switch (kind) {
-      case 'warning':
-        return Icons.warning_rounded;
-      case 'danger':
-      case 'error':
-        return Icons.error_rounded;
-      case 'info':
-        return Icons.info_rounded;
-      case 'tip':
-      case 'success':
-        return Icons.lightbulb_rounded;
-      case 'note':
-      default:
-        return Icons.sticky_note_2_rounded;
-    }
-  }
-  
   @override
   Widget visitElementAfter(md.Element element, TextStyle? preferredStyle) {
-    final kind = element.attributes['kind'] ?? 'note';
-    final title = element.attributes['title'] ?? kind.toUpperCase();
-    final body = element.children?.isNotEmpty == true 
-        ? (element.children!.first as md.Element).textContent 
-        : '';
-    
-    final color = _getColor(kind);
-    final icon = _getIcon(kind);
+    final calloutType = element.attributes['data-callout-type'] ?? 'info';
+    final content = element.textContent;
     
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: color.withOpacity(0.1),
-        border: Border.all(color: color.withOpacity(0.3)),
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(-2, -2),
-            blurRadius: 4,
-            color: Colors.white.withOpacity(0.1),
-          ),
-          BoxShadow(
-            offset: const Offset(3, 3),
-            blurRadius: 8,
-            color: Colors.black.withOpacity(0.2),
-          ),
-        ],
+        color: _getCalloutColor(calloutType).withOpacity(0.1),
+        border: Border.all(
+          color: _getCalloutColor(calloutType),
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(8.0),
       ),
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(icon, size: 18, color: color),
-              const SizedBox(width: 8),
-              Text(
-                title,
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-            ],
+          Icon(
+            _getCalloutIcon(calloutType),
+            color: _getCalloutColor(calloutType),
+            size: 20.0,
           ),
-          if (body.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Text(
-              body,
-              style: const TextStyle(
-                color: Colors.white70,
-                height: 1.4,
+          const SizedBox(width: 12.0),
+          Expanded(
+            child: Text(
+              content,
+              style: TextStyle(
+                color: _getCalloutColor(calloutType),
+                fontSize: 14.0,
               ),
             ),
-          ],
+          ),
         ],
       ),
     );
+  }
+
+  Color _getCalloutColor(String type) {
+    switch (type.toLowerCase()) {
+      case 'note':
+        return Colors.blue;
+      case 'tip':
+        return Colors.green;
+      case 'important':
+        return Colors.purple;
+      case 'warning':
+        return Colors.orange;
+      case 'caution':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  IconData _getCalloutIcon(String type) {
+    switch (type.toLowerCase()) {
+      case 'note':
+        return Icons.info_outline;
+      case 'tip':
+        return Icons.lightbulb_outline;
+      case 'important':
+        return Icons.priority_high;
+      case 'warning':
+        return Icons.warning_outlined;
+      case 'caution':
+        return Icons.dangerous_outlined;
+      default:
+        return Icons.help_outline;
+    }
+  }
+}
+
+class ImageBuilder extends MarkdownElementBuilder {
+  @override
+  Widget visitElementAfter(md.Element element, TextStyle? preferredStyle) {
+    final src = element.attributes['src'] ?? '';
+    final alt = element.attributes['alt'] ?? '';
+    
+    if (src.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    if (src.startsWith('http')) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Image.network(
+          src,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Column(
+                children: [
+                  const Icon(Icons.broken_image, size: 48, color: Colors.grey),
+                  if (alt.isNotEmpty)
+                    Text(alt, style: const TextStyle(color: Colors.grey)),
+                ],
+              ),
+            );
+          },
+        ),
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Image.asset(
+          src,
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Column(
+                children: [
+                  const Icon(Icons.broken_image, size: 48, color: Colors.grey),
+                  if (alt.isNotEmpty)
+                    Text(alt, style: const TextStyle(color: Colors.grey)),
+                ],
+              ),
+            );
+          },
+        ),
+      );
+    }
   }
 }

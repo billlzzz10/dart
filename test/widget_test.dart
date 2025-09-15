@@ -8,23 +8,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:workspace/main.dart';
+// Import all test files
+import 'widgets/project_card_test.dart' as project_card_tests;
+import 'widgets/project_cover_test.dart' as project_cover_tests;
+import 'features/dashboard/dashboard_screen_test.dart' as dashboard_tests;
+import 'features/notes/md/callout_builder_test.dart' as callout_builder_tests;
+import 'data/db/models/project_test.dart' as project_model_tests;
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  group('All Widget Tests', () {
+    project_card_tests.main();
+    project_cover_tests.main();
+    project_cover_tests.main();
+    dashboard_tests.main();
+    callout_builder_tests.main();
+    project_model_tests.main();
   });
 }
