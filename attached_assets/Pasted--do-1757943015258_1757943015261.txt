@@ -1,0 +1,196 @@
+ยืนยัน. ต่อไปนี้คือวิธีทำ “หมวดหมู่กำหนดเอง + เมตาดาต้ากำหนดเอง” แบบใช้งานได้ทันที
+
+แบบข้อมูล
+
+// domain/entities.dart
+class Category { // สร้างแก้ไขลบได้
+  final String id; final String projectId;
+  final String name;              // เช่น "Artifacts"
+  final String color;             // hex
+  final bool starredTrack;        // ใช้ทำเส้นเรื่องได้หรือไม่
+  Category({required this.id, required this.projectId, required this.name, this.color='#6C8CFF', this.starredTrack=false});
+}
+
+class TemplateField {
+  final String key;       // canonical key
+  final String label;     // ภาษาหน้า UI
+  final String type;      // text|number|date|enum|multiselect|bool
+  final List<String>? options;
+  final dynamic defaultValue;
+  TemplateField({required this.key,required this.label,required this.type,this.options,this.defaultValue});
+}
+
+class TemplateSchema {     // ต่อหมวดหรือชนิดไอเท็มใดก็ได้
+  final String id; final String projectId;
+  final String appliesTo;  // 'character'|'location'|'scene'|'item:<categoryId>'
+  final List<String> groups;           // ลำดับกลุ่ม
+  final Map<String,List<String>> groupFields; // group -> field keys
+  final Map<String,TemplateField> fields;     // key -> field
+}
+
+class Item { // ใช้ได้กับทุกหมวด
+  final String id; final String projectId;
+  final String categoryId; // ชี้ไป Category
+  final String title; final List<String> tags;
+  final Map<String,dynamic> meta; // เก็บค่าตาม TemplateField.key
+  // pictures, notes, relations ตามเดิม
+  Item({...});
+}
+
+YAML ของ “เทมเพลตกำหนดเอง”
+
+# assets/templates/artifact.template.yaml
+applies_to: item:artifact
+groups: [General, Lore, Stats]
+fields:
+  name: {label: Name, type: text}
+  origin: {label: Origin, type: text}
+  rarity: {label: Rarity, type: enum, options: [Common, Rare, Epic, Mythic]}
+  attuned: {label: Attuned, type: bool}
+  weight: {label: Weight, type: number}
+  discovered_on: {label: Discovered On, type: date}
+group_fields:
+  General: [name, origin, rarity, attuned]
+  Lore: []
+  Stats: [weight, discovered_on]
+
+YAML ของ “รายการ + เมต้า”
+
+# import เป็นไอเท็มในหมวด Artifacts
+category: Artifacts
+title: ดาบเถ้าอัศวาล
+tags: [โบราณ, ไฟ]
+meta:
+  name: ดาบเถ้าอัศวาล
+  origin: Ashval
+  rarity: Mythic
+  attuned: true
+  weight: 3.2
+  discovered_on: 2024-08-01
+
+Mapper รองรับหลายภาษาและคีย์กำหนดเอง
+
+// domain/services/yaml_mapper.dart
+const synonyms = {
+  'title': ['title','ชื่อเรื่อง','titre'],
+  'tags': ['tags','ป้าย','étiquettes'],
+  'category': ['category','หมวดหมู่','catégorie'],
+  // meta.* ไม่จำกัดคีย์: เข้าตรงตาม TemplateField.key
+};
+
+String canon(String k){
+  final key = k.toLowerCase().trim();
+  for (final e in synonyms.entries) {
+    if (e.value.map((s)=>s.toLowerCase()).contains(key)) return e.key;
+  }
+  return key;
+}
+
+class ImportResult { final String categoryName; final String title; final List<String> tags; final Map<String,dynamic> meta;
+  ImportResult(this.categoryName,this.title,this.tags,this.meta);
+}
+
+ImportResult parseItemYaml(String yamlText){
+  final m = loadYaml(yamlText) as YamlMap;
+  final cat = m[canon('category')]?.toString() ?? 'Uncategorized';
+  final title = m[canon('title')]?.toString() ?? 'Untitled';
+  final tags = (m[canon('tags')] as YamlList?)?.map((e)=>e.toString()).toList() ?? const <String>[];
+  final meta = <String,dynamic>{};
+  final mmeta = m['meta'];
+  if (mmeta is YamlMap) {
+    mmeta.nodes.forEach((k,v){ meta[k.toString()] = (v is YamlScalar) ? v.value : v; });
+  }
+  return ImportResult(cat,title,tags,meta);
+}
+
+สร้างแบบฟอร์มตามเทมเพลตอัตโนมัติ
+
+// features/item/widgets/metadata_panel.dart
+class MetaForm extends StatelessWidget {
+  final TemplateSchema schema; final Map<String,dynamic> values; final void Function(String,dynamic) onChanged;
+  const MetaForm({super.key, required this.schema, required this.values, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: schema.groups.map((g)=>_group(context, g)).toList(),
+    );
+  }
+
+  Widget _group(BuildContext c, String g){
+    final fields = schema.groupFields[g] ?? const <String>[];
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Container(
+        decoration: neuSurface(c), padding: const EdgeInsets.all(12),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(g, style: Theme.of(c).textTheme.titleMedium),
+          const SizedBox(height:8),
+          ...fields.map((k)=>_field(c, schema.fields[k]!)).toList()
+        ]),
+      ),
+    );
+  }
+
+  Widget _field(BuildContext c, TemplateField f){
+    final v = values[f.key];
+    switch (f.type) {
+      case 'text': return _input(c, f, v?.toString() ?? '');
+      case 'number': return _input(c, f, v?.toString() ?? '', keyboard: TextInputType.number);
+      case 'date': return _date(c, f, v);
+      case 'bool': return _switch(c, f, v==true);
+      case 'enum': return _dropdown(c, f, (v?.toString() ?? ''), f.options ?? const []);
+      case 'multiselect': return _chips(c, f, (v as List?)?.cast<String>() ?? const []);
+      default: return _input(c, f, v?.toString() ?? '');
+    }
+  }
+  // … implement _input/_date/_switch/_dropdown/_chips ให้สั้นและลื่น
+}
+
+CRUD หมวดหมู่
+
+เพิ่ม/แก้ไข/ลบ Category ใน project_shell > categories_page.dart
+
+เมื่อสร้าง Category ใหม่ ให้สร้าง TemplateSchema ว่างแนบไว้ทันที
+
+เส้นเรื่องใช้ category.starredTrack เป็นสวิตช์ว่าจะแสดงแทร็กจากไอเท็มหมวดนั้นหรือเฉพาะ “ตัวละคร”
+
+
+ฟลว์ Import
+
+1. ผู้ใช้กด Import YAML/MD ในหน้า Item List หรือ Metadata Panel
+
+
+2. แอปเรียก parseItemYaml
+
+
+3. ถ้าไม่พบ Category ให้สร้าง category ใหม่อัตโนมัติ
+
+
+4. แมป meta เฉพาะคีย์ที่มีใน TemplateSchema; ส่วนที่ไม่มี เก็บใน meta['_extra'] เพื่อไม่ทิ้งข้อมูล
+
+
+5. บันทึก Item.meta ลง DB
+
+
+
+Export
+
+เลือก Item/Category → Export YAML เดียวกันรูปแบบด้านบน
+
+รวม TemplateSchema เป็นไฟล์ .template.yaml แยก
+
+
+UI สรุป
+
+Categories: หน้า list + ปุ่ม “Add Category” → ฟอร์มชื่อ สี ใช้ทำแทร็กไหม
+
+Templates: แก้ฟิลด์แบบตารางเล็กๆ + ลำดับกลุ่ม drag-and-drop
+
+Metadata Panel: inline edit + ปุ่ม “Import YAML/MD” และ “Copy YAML”
+
+Editor: [[wikilink]] ไปยัง Item ทุกหมวด
+
+
+ต้องการให้ใส่ไฟล์ตัวอย่างจริงใน assets/templates/ สำหรับ Characters, Locations, Artifacts, Organizations และ Scene พร้อมเชื่อมหน้า Templates ให้แก้ไขได้ทันทีไหม?
+
