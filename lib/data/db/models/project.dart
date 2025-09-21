@@ -1,34 +1,33 @@
-import 'package:isar/isar.dart';
-
-part 'project.g.dart';
-
-@collection
 class Project {
-  Id id = Isar.autoIncrement;
+  String id;
+  String projectId;
+  String name;
 
-  @Index()
-  late String projectId;
-
-  @Index()
-  late String name;
-
-  String description = '';
-
-  late DateTime createdAt;
-
-  late DateTime updatedAt;
-
-  List<String> characterIds = [];
-
-  List<String> sceneIds = [];
-
-  List<String> settings = [];
-
+  String description;
+  DateTime createdAt;
+  DateTime updatedAt;
+  List<String> characterIds;
+  List<String> sceneIds;
+  List<String> settings;
   String? coverUrl;
   String? emoji;
   String? icon;
 
-  Project();
+  Project({
+    required this.id,
+    required this.projectId,
+    required this.name,
+    this.description = '',
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    this.characterIds = const [],
+    this.sceneIds = const [],
+    this.settings = const [],
+    this.coverUrl,
+    this.emoji,
+    this.icon,
+  }) : createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 
   Project.create({
     required this.projectId,
@@ -42,9 +41,7 @@ class Project {
     this.coverUrl,
     this.emoji,
     this.icon,
-  }) {
-    final now = DateTime.now();
-    this.createdAt = createdAt ?? now;
-    this.updatedAt = updatedAt ?? now;
-  }
+  }) : id = DateTime.now().millisecondsSinceEpoch.toString(),
+       createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 }

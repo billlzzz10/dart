@@ -33,8 +33,8 @@ void main() {
           overrides: [
             projectRepoProvider.overrideWith((ref) => MockProjectRepo(mockProjects)),
           ],
-          child: MaterialApp(
-            home: const DashboardScreen(),
+          child: const MaterialApp(
+            home: DashboardScreen(),
           ),
         ),
       );
@@ -48,8 +48,8 @@ void main() {
           overrides: [
             projectRepoProvider.overrideWith((ref) => MockProjectRepo(mockProjects)),
           ],
-          child: MaterialApp(
-            home: const DashboardScreen(),
+          child: const MaterialApp(
+            home: DashboardScreen(),
           ),
         ),
       );
@@ -64,8 +64,8 @@ void main() {
           overrides: [
             projectRepoProvider.overrideWith((ref) => MockProjectRepo([])),
           ],
-          child: MaterialApp(
-            home: const DashboardScreen(),
+          child: const MaterialApp(
+            home: DashboardScreen(),
           ),
         ),
       );

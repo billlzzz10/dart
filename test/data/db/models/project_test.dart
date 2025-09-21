@@ -55,10 +55,10 @@ void main() {
       );
       final after = DateTime.now();
 
-      expect(project.createdAt.isAfter(before.subtract(Duration(seconds: 1))), isTrue);
-      expect(project.createdAt.isBefore(after.add(Duration(seconds: 1))), isTrue);
-      expect(project.updatedAt.isAfter(before.subtract(Duration(seconds: 1))), isTrue);
-      expect(project.updatedAt.isBefore(after.add(Duration(seconds: 1))), isTrue);
+      expect(project.createdAt.isAfter(before.subtract(const Duration(seconds: 1))), isTrue);
+      expect(project.createdAt.isBefore(after.add(const Duration(seconds: 1))), isTrue);
+      expect(project.updatedAt.isAfter(before.subtract(const Duration(seconds: 1))), isTrue);
+      expect(project.updatedAt.isBefore(after.add(const Duration(seconds: 1))), isTrue);
     });
 
     test('should handle optional cover properties', () {

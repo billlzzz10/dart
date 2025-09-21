@@ -18,7 +18,7 @@ class AppTheme {
         surface: _surfaceColor,
       ),
       scaffoldBackgroundColor: _surfaceColor,
-      cardTheme: const CardTheme(
+      cardTheme: const CardThemeData(
         color: _cardColor,
         elevation: 2,
         margin: EdgeInsets.all(8),
@@ -53,12 +53,12 @@ class AppTheme {
         fillColor: Colors.white,
         contentPadding: const EdgeInsets.all(16),
       ),
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: _surfaceColor,
         foregroundColor: Colors.black87,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: const TextStyle(
+        titleTextStyle: TextStyle(
           color: Colors.black87,
           fontSize: 20,
           fontWeight: FontWeight.w600,
@@ -78,7 +78,7 @@ class AppTheme {
         surface: _darkSurfaceColor,
       ),
       scaffoldBackgroundColor: _darkSurfaceColor,
-      cardTheme: const CardTheme(
+      cardTheme: const CardThemeData(
         color: _darkCardColor,
         elevation: 2,
         margin: EdgeInsets.all(8),
@@ -113,12 +113,12 @@ class AppTheme {
         fillColor: _darkCardColor,
         contentPadding: const EdgeInsets.all(16),
       ),
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: _darkSurfaceColor,
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: const TextStyle(
+        titleTextStyle: TextStyle(
           color: Colors.white,
           fontSize: 20,
           fontWeight: FontWeight.w600,

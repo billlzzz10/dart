@@ -21,12 +21,12 @@ class ProjectCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              const Color(0xFF2A2D3D),
-              const Color(0xFF1F222F),
+              Color(0xFF2A2D3D),
+              Color(0xFF1F222F),
             ],
           ),
           boxShadow: [
@@ -70,7 +70,7 @@ class ProjectCard extends StatelessWidget {
                     ),
                   Expanded(
                     child: Text(
-                      project.title,
+                      project.name,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -93,12 +93,12 @@ class ProjectCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
-              if (project.tags.isNotEmpty) ...[
+              if (project.settings.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 4,
                   runSpacing: 4,
-                  children: project.tags.take(3).map((tag) => Container(
+                  children: project.settings.take(3).map((tag) => Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),

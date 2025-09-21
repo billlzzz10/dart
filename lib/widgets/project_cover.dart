@@ -7,18 +7,22 @@ class ProjectCover extends StatelessWidget {
   final Project project;
   final double height;
   final double? width;
+  final VoidCallback? onEdit;
 
   const ProjectCover({
     super.key,
     required this.project,
     this.height = 160,
     this.width,
+    this.onEdit,
   });
 
   @override
   Widget build(BuildContext context) {
+    Widget coverContent;
+
     if (project.coverUrl != null && project.coverUrl!.isNotEmpty) {
-      return ClipRRect(
+      coverContent = ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: project.coverUrl!.startsWith('http')
             ? Image.network(
@@ -36,9 +40,37 @@ class ProjectCover extends StatelessWidget {
                 errorBuilder: (context, error, stackTrace) => _buildFallback(),
               ),
       );
+    } else {
+      coverContent = _buildFallback();
     }
-    
-    return _buildFallback();
+
+    if (onEdit != null) {
+      return Stack(
+        clipBehavior: Clip.none,
+        children: [
+          coverContent,
+          Positioned(
+            bottom: 8,
+            right: 8,
+            child: TextButton.icon(
+              onPressed: onEdit,
+              icon: const Icon(LucideIcons.imagePlus, size: 16),
+              label: const Text('Change'),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.black.withOpacity(0.6),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return coverContent;
   }
 
   Widget _buildFallback() {
@@ -47,12 +79,12 @@ class ProjectCover extends StatelessWidget {
       width: width ?? double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0x332E86FF),
-            const Color(0x556B46C1),
+            Color(0x332E86FF),
+            Color(0x556B46C1),
           ],
         ),
       ),
