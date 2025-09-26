@@ -1,4 +1,3 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -6,6 +5,10 @@ import '../features/dashboard/dashboard_screen.dart';
 import '../features/notes/notes_page.dart';
 import '../features/project/project_screen.dart';
 
+/// Provides the [GoRouter] instance for the application.
+///
+/// This provider is responsible for creating and configuring the router.
+/// It defines the application's routes and their corresponding screens.
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/',
@@ -22,7 +25,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           final projectId = state.pathParameters['id'];
           if (projectId != null) {
             return ProjectScreen(projectId: projectId);
-          } 
+          }
           // TODO: Handle this case, maybe redirect to a 404 page
           return const DashboardScreen();
         },

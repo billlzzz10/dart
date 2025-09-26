@@ -1,9 +1,14 @@
-
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:novelist_app_ver2/src/widgets/unsplash_picker_dialog.dart';
 
+/// A dialog that allows the user to choose a new cover for their project.
+///
+/// This dialog presents a list of options for changing the project cover,
+/// including searching the web, uploading from the device, choosing an icon,
+/// or choosing an emoji.
 class AssetPickerDialog extends StatelessWidget {
+  /// Creates a new [AssetPickerDialog] instance.
   const AssetPickerDialog({super.key});
 
   @override

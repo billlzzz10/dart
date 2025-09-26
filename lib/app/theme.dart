@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
 
+/// A class that provides the application's themes.
+///
+/// This class contains static methods for creating light and dark themes.
+/// It also defines the color palette for the application.
 class AppTheme {
+  /// The primary color for the application.
   static const Color _primaryColor = Color(0xFF6366F1);
+
+  /// The surface color for the light theme.
   static const Color _surfaceColor = Color(0xFFF8FAFC);
+
+  /// The card color for the light theme.
   static const Color _cardColor = Color(0xFFFFFFFF);
-  
+
+  /// The surface color for the dark theme.
   static const Color _darkSurfaceColor = Color(0xFF0F172A);
+
+  /// The card color for the dark theme.
   static const Color _darkCardColor = Color(0xFF1E293B);
 
+  /// Returns the light theme for the application.
   static ThemeData light() {
     return ThemeData(
       useMaterial3: true,
@@ -68,6 +81,7 @@ class AppTheme {
     );
   }
 
+  /// Returns the dark theme for the application.
   static ThemeData dark() {
     return ThemeData(
       useMaterial3: true,

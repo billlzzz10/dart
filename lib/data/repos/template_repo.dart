@@ -2,10 +2,19 @@ import 'package:flutter/services.dart';
 import 'package:yaml/yaml.dart';
 import '../../domain/entities.dart';
 
+/// A repository for managing templates.
+///
+/// This class provides methods for accessing template data, which is stored
+/// in YAML files in the `assets/templates` directory.
 class TemplateRepository {
+  /// Returns a list of all available templates.
+  ///
+  /// This method loads all the template files from the `assets/templates`
+  /// directory, parses them as YAML, and returns them as a list of [Template]
+  /// objects.
   Future<List<Template>> getTemplates() async {
     final templates = <Template>[];
-    
+
     try {
       // Load character template
       final characterYaml = await rootBundle.loadString('assets/templates/character.template.yaml');
@@ -54,6 +63,10 @@ class TemplateRepository {
     return templates;
   }
 
+  /// Returns a template by its ID.
+  ///
+  /// [templateId] is the ID of the template to fetch.
+  /// Returns the template, or `null` if it doesn't exist.
   Future<Template?> getTemplate(String templateId) async {
     final templates = await getTemplates();
     try {
