@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
 
+/// A [MarkdownElementBuilder] for building callout blocks.
+///
+/// This builder creates a styled container for the callout block, with a
+/// color and icon that correspond to the callout type.
 class CalloutBuilder extends MarkdownElementBuilder {
   @override
   Widget visitElementAfter(md.Element element, TextStyle? preferredStyle) {
@@ -42,6 +46,10 @@ class CalloutBuilder extends MarkdownElementBuilder {
     );
   }
 
+  /// Returns the color for a given callout type.
+  ///
+  /// [type] is the type of the callout.
+  /// Returns the color for the callout.
   Color _getCalloutColor(String type) {
     switch (type.toLowerCase()) {
       case 'note':
@@ -59,6 +67,10 @@ class CalloutBuilder extends MarkdownElementBuilder {
     }
   }
 
+  /// Returns the icon for a given callout type.
+  ///
+  /// [type] is the type of the callout.
+  /// Returns the icon for the callout.
   IconData _getCalloutIcon(String type) {
     switch (type.toLowerCase()) {
       case 'note':
@@ -77,12 +89,16 @@ class CalloutBuilder extends MarkdownElementBuilder {
   }
 }
 
+/// A [MarkdownElementBuilder] for building images.
+///
+/// This builder handles both network and asset images. If the image fails to
+/// load, it displays a broken image icon and the alt text.
 class ImageBuilder extends MarkdownElementBuilder {
   @override
   Widget visitElementAfter(md.Element element, TextStyle? preferredStyle) {
     final src = element.attributes['src'] ?? '';
     final alt = element.attributes['alt'] ?? '';
-    
+
     if (src.isEmpty) {
       return const SizedBox.shrink();
     }

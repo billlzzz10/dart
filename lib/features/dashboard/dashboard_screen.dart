@@ -5,7 +5,13 @@ import 'package:go_router/go_router.dart';
 import '../../data/repos/project_repo.dart';
 import '../../widgets/project_card.dart';
 
+/// The main screen of the application, which displays a dashboard of projects.
+///
+/// This screen fetches a list of projects from the [projectRepoProvider] and
+/// displays them in a staggered grid view. Tapping on a project card navigates
+/// to the project screen.
 class DashboardScreen extends ConsumerWidget {
+  /// Creates a new [DashboardScreen] instance.
   const DashboardScreen({super.key});
 
   @override

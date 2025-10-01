@@ -1,14 +1,31 @@
-
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../data/db/models/project.dart';
 
+/// A widget that displays the cover image for a project.
+///
+/// This widget displays the project's cover image if it is available.
+/// Otherwise, it displays a fallback with an icon or emoji. It also
+/// includes an optional edit button.
 class ProjectCover extends StatelessWidget {
+  /// The project to be displayed.
   final Project project;
+
+  /// The height of the cover image.
   final double height;
+
+  /// The width of the cover image.
   final double? width;
+
+  /// A callback that is called when the edit button is tapped.
   final VoidCallback? onEdit;
 
+  /// Creates a new [ProjectCover] instance.
+  ///
+  /// [project] is the project to be displayed.
+  /// [height] is the height of the cover image.
+  /// [width] is the width of the cover image.
+  /// [onEdit] is a callback that is called when the edit button is tapped.
   const ProjectCover({
     super.key,
     required this.project,
@@ -73,6 +90,7 @@ class ProjectCover extends StatelessWidget {
     return coverContent;
   }
 
+  /// Builds the fallback widget to be displayed when the cover image is not available.
   Widget _buildFallback() {
     return Container(
       height: height,
@@ -94,6 +112,7 @@ class ProjectCover extends StatelessWidget {
     );
   }
 
+  /// Builds the icon or emoji to be displayed in the fallback widget.
   Widget _buildIconOrEmoji() {
     if (project.icon != null && project.icon!.isNotEmpty) {
       final IconData? iconData = _getIconData(project.icon!);
@@ -101,14 +120,14 @@ class ProjectCover extends StatelessWidget {
         return Icon(iconData, size: 64, color: Colors.white70);
       }
     }
-    
+
     if (project.emoji != null && project.emoji!.isNotEmpty) {
       return Text(
         project.emoji!,
         style: const TextStyle(fontSize: 56),
       );
     }
-    
+
     return const Icon(
       LucideIcons.bookOpen,
       size: 64,
@@ -116,6 +135,13 @@ class ProjectCover extends StatelessWidget {
     );
   }
 
+  /// Returns the [IconData] for a given icon name.
+  ///
+  /// This method maps a string icon name to the corresponding [IconData] from
+  /// the `lucide_icons` package.
+  ///
+  /// [iconName] is the name of the icon to be returned.
+  /// Returns the [IconData] for the icon, or `null` if the icon name is not found.
   IconData? _getIconData(String iconName) {
     // Map common icon names to LucideIcons
     const iconMap = {
@@ -130,7 +156,7 @@ class ProjectCover extends StatelessWidget {
       'lightning': LucideIcons.zap,
       'globe': LucideIcons.globe,
     };
-    
+
     return iconMap[iconName];
   }
 }

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_highlight/flutter_highlight.dart';
@@ -8,11 +7,20 @@ import 'md/callout_syntax.dart';
 import 'md/callout_builder.dart';
 import 'md/wikilink_syntax.dart';
 
+/// A widget for viewing a note with rendered Markdown content.
+///
+/// This widget uses the `flutter_markdown` package to render the note content.
+/// It supports standard Markdown syntax, as well as custom syntax for callouts
+/// and wikilinks.
 class NoteViewer extends StatelessWidget {
+  /// The text of the note to be displayed.
   final String text;
-  
+
+  /// Creates a new [NoteViewer] instance.
+  ///
+  /// [text] is the text of the note to be displayed.
   const NoteViewer({super.key, required this.text});
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -107,13 +115,17 @@ class NoteViewer extends StatelessWidget {
   }
 }
 
+/// A [MarkdownElementBuilder] for building code blocks with syntax highlighting.
+///
+/// This builder uses the `flutter_highlight` package to render code blocks
+/// with the Atom One Dark theme.
 class CodeBlockBuilder extends MarkdownElementBuilder {
   @override
   Widget visitElementAfter(md.Element element, TextStyle? preferredStyle) {
     final className = element.attributes['class'];
     final language = className?.replaceFirst('language-', '') ?? 'plaintext';
     final code = element.textContent;
-    
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: ClipRRect(
@@ -134,6 +146,14 @@ class CodeBlockBuilder extends MarkdownElementBuilder {
   }
 }
 
+/// Resolves a wikilink by finding the best match in the database.
+///
+/// This is a placeholder function that simply returns the link text.
+/// In a real application, this would search the database for a note
+/// with a matching title or alias.
+///
+/// [linkText] is the text of the wikilink to resolve.
+/// Returns the resolved link.
 String resolveByBestMatch(String linkText) {
   // TODO: Implement actual resolution from database
   return linkText;

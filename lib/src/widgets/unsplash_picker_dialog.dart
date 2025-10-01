@@ -1,10 +1,15 @@
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../core/api_keys.dart';
 
+/// A dialog that allows the user to search for and select an image from Unsplash.
+///
+/// This dialog provides a search bar for finding images on Unsplash. The results
+/// are displayed in a grid, and the user can select an image to be returned as
+/// the result of the dialog.
 class UnsplashPickerDialog extends StatefulWidget {
+  /// Creates a new [UnsplashPickerDialog] instance.
   const UnsplashPickerDialog({super.key});
 
   @override
@@ -30,6 +35,10 @@ class _UnsplashPickerDialogState extends State<UnsplashPickerDialog> {
     super.dispose();
   }
 
+  /// Searches for images on Unsplash.
+  ///
+  /// [loadMore] indicates whether to load more images for the current query.
+  /// If `false`, a new search is performed.
   Future<void> _searchImages({bool loadMore = false}) async {
     if (_searchController.text.isEmpty) return;
 

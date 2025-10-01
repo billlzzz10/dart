@@ -9,9 +9,12 @@ import 'db/models/scene.dart' as isar_models;
 import 'db/models/item.dart' as isar_models;
 import 'db/models/metadata.dart' as isar_models;
 
+/// A concrete implementation of the [DatabaseService] interface that uses the Isar database.
+///
+/// This service is used for mobile and desktop platforms.
 class IsarDatabaseService implements DatabaseService {
   late Isar _isar;
-  
+
   @override
   Future<void> initialize() async {
     final dir = await getApplicationDocumentsDirectory();
@@ -21,8 +24,11 @@ class IsarDatabaseService implements DatabaseService {
       inspector: kDebugMode,
     );
   }
-  
-  // Conversion functions from base models to Isar models
+
+  /// Converts a [base.Project] to an [isar_models.Project].
+  ///
+  /// [baseProject] is the base project to convert.
+  /// Returns the converted Isar project.
   isar_models.Project _toIsarProject(base.Project baseProject) {
     final isarProject = isar_models.Project();
     isarProject.id = baseProject.id;
@@ -36,7 +42,11 @@ class IsarDatabaseService implements DatabaseService {
     isarProject.settings = List.from(baseProject.settings);
     return isarProject;
   }
-  
+
+  /// Converts an [isar_models.Project] to a [base.Project].
+  ///
+  /// [isarProject] is the Isar project to convert.
+  /// Returns the converted base project.
   base.Project _fromIsarProject(isar_models.Project isarProject) {
     final baseProject = base.Project();
     baseProject.id = isarProject.id;
@@ -50,7 +60,11 @@ class IsarDatabaseService implements DatabaseService {
     baseProject.settings = List.from(isarProject.settings);
     return baseProject;
   }
-  
+
+  /// Converts a [base.Scene] to an [isar_models.Scene].
+  ///
+  /// [baseScene] is the base scene to convert.
+  /// Returns the converted Isar scene.
   isar_models.Scene _toIsarScene(base.Scene baseScene) {
     final isarScene = isar_models.Scene();
     isarScene.id = baseScene.id;
@@ -65,7 +79,11 @@ class IsarDatabaseService implements DatabaseService {
     isarScene.updatedAt = baseScene.updatedAt;
     return isarScene;
   }
-  
+
+  /// Converts an [isar_models.Scene] to a [base.Scene].
+  ///
+  /// [isarScene] is the Isar scene to convert.
+  /// Returns the converted base scene.
   base.Scene _fromIsarScene(isar_models.Scene isarScene) {
     final baseScene = base.Scene();
     baseScene.id = isarScene.id;
@@ -80,7 +98,11 @@ class IsarDatabaseService implements DatabaseService {
     baseScene.updatedAt = isarScene.updatedAt;
     return baseScene;
   }
-  
+
+  /// Converts a [base.Item] to an [isar_models.Item].
+  ///
+  /// [baseItem] is the base item to convert.
+  /// Returns the converted Isar item.
   isar_models.Item _toIsarItem(base.Item baseItem) {
     final isarItem = isar_models.Item();
     isarItem.id = baseItem.id;
@@ -99,7 +121,11 @@ class IsarDatabaseService implements DatabaseService {
     isarItem.updatedAt = baseItem.updatedAt;
     return isarItem;
   }
-  
+
+  /// Converts an [isar_models.Item] to a [base.Item].
+  ///
+  /// [isarItem] is the Isar item to convert.
+  /// Returns the converted base item.
   base.Item _fromIsarItem(isar_models.Item isarItem) {
     final baseItem = base.Item();
     baseItem.id = isarItem.id;
@@ -118,7 +144,11 @@ class IsarDatabaseService implements DatabaseService {
     baseItem.updatedAt = isarItem.updatedAt;
     return baseItem;
   }
-  
+
+  /// Converts a [base.Metadata] to an [isar_models.Metadata].
+  ///
+  /// [baseMetadata] is the base metadata to convert.
+  /// Returns the converted Isar metadata.
   isar_models.Metadata _toIsarMetadata(base.Metadata baseMetadata) {
     final isarMetadata = isar_models.Metadata();
     isarMetadata.id = baseMetadata.id;
@@ -128,7 +158,11 @@ class IsarDatabaseService implements DatabaseService {
     isarMetadata.updatedAt = baseMetadata.updatedAt;
     return isarMetadata;
   }
-  
+
+  /// Converts an [isar_models.Metadata] to a [base.Metadata].
+  ///
+  /// [isarMetadata] is the Isar metadata to convert.
+  /// Returns the converted base metadata.
   base.Metadata _fromIsarMetadata(isar_models.Metadata isarMetadata) {
     final baseMetadata = base.Metadata();
     baseMetadata.id = isarMetadata.id;
@@ -138,7 +172,11 @@ class IsarDatabaseService implements DatabaseService {
     baseMetadata.updatedAt = isarMetadata.updatedAt;
     return baseMetadata;
   }
-  
+
+  /// Converts a [base.ItemType] to an [isar_models.ItemType].
+  ///
+  /// [baseType] is the base item type to convert.
+  /// Returns the converted Isar item type.
   isar_models.ItemType _toIsarItemType(base.ItemType baseType) {
     switch (baseType) {
       case base.ItemType.character:
@@ -153,7 +191,11 @@ class IsarDatabaseService implements DatabaseService {
         return isar_models.ItemType.extra;
     }
   }
-  
+
+  /// Converts an [isar_models.ItemType] to a [base.ItemType].
+  ///
+  /// [isarType] is the Isar item type to convert.
+  /// Returns the converted base item type.
   base.ItemType _fromIsarItemType(isar_models.ItemType isarType) {
     switch (isarType) {
       case isar_models.ItemType.character:
@@ -168,7 +210,7 @@ class IsarDatabaseService implements DatabaseService {
         return base.ItemType.extra;
     }
   }
-  
+
   // Project operations
   @override
   Future<void> saveProject(base.Project project) async {
@@ -177,26 +219,26 @@ class IsarDatabaseService implements DatabaseService {
       await _isar.projects.put(isarProject);
     });
   }
-  
+
   @override
   Future<base.Project?> getProject(String projectId) async {
     final isarProject = await _isar.projects.filter().projectIdEqualTo(projectId).findFirst();
     return isarProject != null ? _fromIsarProject(isarProject) : null;
   }
-  
+
   @override
   Future<List<base.Project>> getAllProjects() async {
     final isarProjects = await _isar.projects.where().findAll();
     return isarProjects.map(_fromIsarProject).toList();
   }
-  
+
   @override
   Future<void> deleteProject(String projectId) async {
     await _isar.writeTxn(() async {
       await _isar.projects.filter().projectIdEqualTo(projectId).deleteAll();
     });
   }
-  
+
   // Scene operations
   @override
   Future<void> saveScene(base.Scene scene) async {
@@ -205,26 +247,26 @@ class IsarDatabaseService implements DatabaseService {
       await _isar.scenes.put(isarScene);
     });
   }
-  
+
   @override
   Future<base.Scene?> getScene(String sceneId) async {
     final isarScene = await _isar.scenes.filter().sceneIdEqualTo(sceneId).findFirst();
     return isarScene != null ? _fromIsarScene(isarScene) : null;
   }
-  
+
   @override
   Future<List<base.Scene>> getScenesByProject(String projectId) async {
     final isarScenes = await _isar.scenes.filter().projectIdEqualTo(projectId).findAll();
     return isarScenes.map(_fromIsarScene).toList();
   }
-  
+
   @override
   Future<void> deleteScene(String sceneId) async {
     await _isar.writeTxn(() async {
       await _isar.scenes.filter().sceneIdEqualTo(sceneId).deleteAll();
     });
   }
-  
+
   // Item operations
   @override
   Future<void> saveItem(base.Item item) async {
@@ -233,26 +275,26 @@ class IsarDatabaseService implements DatabaseService {
       await _isar.items.put(isarItem);
     });
   }
-  
+
   @override
   Future<base.Item?> getItem(String itemId) async {
     final isarItem = await _isar.items.filter().itemIdEqualTo(itemId).findFirst();
     return isarItem != null ? _fromIsarItem(isarItem) : null;
   }
-  
+
   @override
   Future<List<base.Item>> getItemsByProject(String projectId) async {
     final isarItems = await _isar.items.filter().projectIdEqualTo(projectId).findAll();
     return isarItems.map(_fromIsarItem).toList();
   }
-  
+
   @override
   Future<void> deleteItem(String itemId) async {
     await _isar.writeTxn(() async {
       await _isar.items.filter().itemIdEqualTo(itemId).deleteAll();
     });
   }
-  
+
   // Metadata operations
   @override
   Future<void> saveMetadata(base.Metadata metadata) async {
@@ -261,19 +303,19 @@ class IsarDatabaseService implements DatabaseService {
       await _isar.metadatas.put(isarMetadata);
     });
   }
-  
+
   @override
   Future<base.Metadata?> getMetadata(String metadataId) async {
     final isarMetadata = await _isar.metadatas.filter().metadataIdEqualTo(metadataId).findFirst();
     return isarMetadata != null ? _fromIsarMetadata(isarMetadata) : null;
   }
-  
+
   @override
   Future<List<base.Metadata>> getMetadataByItem(String itemId) async {
     final isarMetadatas = await _isar.metadatas.filter().itemIdEqualTo(itemId).findAll();
     return isarMetadatas.map(_fromIsarMetadata).toList();
   }
-  
+
   @override
   Future<void> deleteMetadata(String metadataId) async {
     await _isar.writeTxn(() async {
@@ -282,7 +324,7 @@ class IsarDatabaseService implements DatabaseService {
   }
 }
 
-// Factory function for mobile/desktop
+/// Creates a new [DatabaseService] instance for mobile/desktop.
 DatabaseService createDatabaseService() {
   return IsarDatabaseService();
 }

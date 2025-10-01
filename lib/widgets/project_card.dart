@@ -1,13 +1,24 @@
-
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../data/db/models/project.dart';
 import 'project_cover.dart';
 
+/// A card widget for displaying a summary of a project.
+///
+/// This widget displays the project's cover image, name, description, and
+/// other details in a styled card. It is typically used in a list or grid
+/// of projects.
 class ProjectCard extends StatelessWidget {
+  /// The project to be displayed.
   final Project project;
+
+  /// A callback that is called when the card is tapped.
   final VoidCallback? onTap;
 
+  /// Creates a new [ProjectCard] instance.
+  ///
+  /// [project] is the project to be displayed.
+  /// [onTap] is a callback that is called when the card is tapped.
   const ProjectCard({
     super.key,
     required this.project,
@@ -123,6 +134,13 @@ class ProjectCard extends StatelessWidget {
     );
   }
 
+  /// Returns the [IconData] for a given icon name.
+  ///
+  /// This method maps a string icon name to the corresponding [IconData] from
+  /// the `lucide_icons` package.
+  ///
+  /// [iconName] is the name of the icon to be returned.
+  /// Returns the [IconData] for the icon, or `null` if the icon name is not found.
   IconData? _getIconData(String iconName) {
     const iconMap = {
       'book-open': LucideIcons.bookOpen,
@@ -136,7 +154,7 @@ class ProjectCard extends StatelessWidget {
       'lightning': LucideIcons.zap,
       'globe': LucideIcons.globe,
     };
-    
+
     return iconMap[iconName];
   }
 }
